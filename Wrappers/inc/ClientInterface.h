@@ -8,56 +8,56 @@
 #include "inc/Socket/Client.h"
 #include "inc/Socket/ResourceManager.h"
 
-#include <unordered_map>
 #include <atomic>
 #include <mutex>
+#include <unordered_map>
 
-class AnnClient
-{
-public:
-    AnnClient(const char* p_serverAddr, const char* p_serverPort);
+class AnnClient {
+ public:
+  AnnClient(const char* p_serverAddr, const char* p_serverPort);
 
-    ~AnnClient();
+  ~AnnClient();
 
-    void SetTimeoutMilliseconds(int p_timeout);
+  void SetTimeoutMilliseconds(int p_timeout);
 
-    void SetSearchParam(const char* p_name, const char* p_value);
+  void SetSearchParam(const char* p_name, const char* p_value);
 
-    void ClearSearchParam();
+  void ClearSearchParam();
 
-    std::shared_ptr<RemoteSearchResult> Search(ByteArray p_data, int p_resultNum, const char* p_valueType, bool p_withMetaData);
+  std::shared_ptr<RemoteSearchResult> Search(ByteArray p_data, int p_resultNum,
+                                             const char* p_valueType,
+                                             bool p_withMetaData);
 
-    bool IsConnected() const;
+  bool IsConnected() const;
 
-private:
-    std::string CreateSearchQuery(const ByteArray& p_data,
-                                  int p_resultNum,
-                                  bool p_extractMetadata,
-                                  SPTAG::VectorValueType p_valueType);
+ private:
+  std::string CreateSearchQuery(const ByteArray& p_data, int p_resultNum,
+                                bool p_extractMetadata,
+                                SPTAG::VectorValueType p_valueType);
 
-    SPTAG::Socket::PacketHandlerMapPtr GetHandlerMap();
+  SPTAG::Socket::PacketHandlerMapPtr GetHandlerMap();
 
-    void SearchResponseHanlder(SPTAG::Socket::ConnectionID p_localConnectionID,
-                               SPTAG::Socket::Packet p_packet);
+  void SearchResponseHanlder(SPTAG::Socket::ConnectionID p_localConnectionID,
+                             SPTAG::Socket::Packet p_packet);
 
-private:
-    typedef std::function<void(SPTAG::Socket::RemoteSearchResult)> Callback;
+ private:
+  typedef std::function<void(SPTAG::Socket::RemoteSearchResult)> Callback;
 
-    std::uint32_t m_timeoutInMilliseconds;
+  std::uint32_t m_timeoutInMilliseconds;
 
-    std::string m_server;
+  std::string m_server;
 
-    std::string m_port;
+  std::string m_port;
 
-    std::unique_ptr<SPTAG::Socket::Client> m_socketClient;
+  std::unique_ptr<SPTAG::Socket::Client> m_socketClient;
 
-    std::atomic<SPTAG::Socket::ConnectionID> m_connectionID;
+  std::atomic<SPTAG::Socket::ConnectionID> m_connectionID;
 
-    SPTAG::Socket::ResourceManager<Callback> m_callbackManager;
+  SPTAG::Socket::ResourceManager<Callback> m_callbackManager;
 
-    std::unordered_map<std::string, std::string> m_params;
+  std::unordered_map<std::string, std::string> m_params;
 
-    std::mutex m_paramMutex;
+  std::mutex m_paramMutex;
 };
 
-#endif // _SPTAG_PW_CLIENTINTERFACE_H_
+#endif  // _SPTAG_PW_CLIENTINTERFACE_H_

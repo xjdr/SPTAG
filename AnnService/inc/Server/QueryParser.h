@@ -9,48 +9,42 @@
 
 #include <vector>
 
-namespace SPTAG
-{
-namespace Service
-{
+namespace SPTAG {
+namespace Service {
 
+class QueryParser {
+ public:
+  typedef std::pair<const char*, const char*> OptionPair;
 
-class QueryParser
-{
-public:
-    typedef std::pair<const char*, const char*> OptionPair;
+  QueryParser();
 
-    QueryParser();
+  ~QueryParser();
 
-    ~QueryParser();
+  ErrorCode Parse(const std::string& p_query, const char* p_vectorSeparator);
 
-    ErrorCode Parse(const std::string& p_query, const char* p_vectorSeparator);
+  const std::vector<const char*>& GetVectorElements() const;
 
-    const std::vector<const char*>& GetVectorElements() const;
+  const std::vector<OptionPair>& GetOptions() const;
 
-    const std::vector<OptionPair>& GetOptions() const;
+  const char* GetVectorBase64() const;
 
-    const char* GetVectorBase64() const;
+  SizeType GetVectorBase64Length() const;
 
-    SizeType GetVectorBase64Length() const;
+ private:
+  std::vector<OptionPair> m_options;
 
-private:
-    std::vector<OptionPair> m_options;
+  std::vector<const char*> m_vectorElements;
 
-    std::vector<const char*> m_vectorElements;
+  const char* m_vectorBase64;
 
-    const char* m_vectorBase64;
+  SizeType m_vectorBase64Length;
 
-    SizeType m_vectorBase64Length;
+  ByteArray m_dataHolder;
 
-    ByteArray m_dataHolder;
-
-    static const char* c_defaultVectorSeparator;
+  static const char* c_defaultVectorSeparator;
 };
 
+}  // namespace Server
+}  // namespace AnnService
 
-} // namespace Server
-} // namespace AnnService
-
-
-#endif // _SPTAG_SERVER_QUERYPARSER_H_
+#endif  // _SPTAG_SERVER_QUERYPARSER_H_

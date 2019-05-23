@@ -4,64 +4,57 @@
 #ifndef _SPTAG_AGGREGATOR_AGGREGATORCONTEXT_H_
 #define _SPTAG_AGGREGATOR_AGGREGATORCONTEXT_H_
 
-#include "inc/Socket/Common.h"
 #include "AggregatorSettings.h"
+#include "inc/Socket/Common.h"
 
+#include <atomic>
 #include <memory>
 #include <vector>
-#include <atomic>
 
-namespace SPTAG
-{
-namespace Aggregator
-{
+namespace SPTAG {
+namespace Aggregator {
 
-enum RemoteMachineStatus : uint8_t
-{
-    Disconnected = 0,
+enum RemoteMachineStatus : uint8_t {
+  Disconnected = 0,
 
-    Connecting,
+  Connecting,
 
-    Connected
+  Connected
 };
 
+struct RemoteMachine {
+  RemoteMachine();
 
-struct RemoteMachine
-{
-    RemoteMachine();
+  std::string m_address;
 
-    std::string m_address;
+  std::string m_port;
 
-    std::string m_port;
+  Socket::ConnectionID m_connectionID;
 
-    Socket::ConnectionID m_connectionID;
-
-    std::atomic<RemoteMachineStatus> m_status;
+  std::atomic<RemoteMachineStatus> m_status;
 };
 
-class AggregatorContext
-{
-public:
-    AggregatorContext(const std::string& p_filePath);
+class AggregatorContext {
+ public:
+  AggregatorContext(const std::string& p_filePath);
 
-    ~AggregatorContext();
+  ~AggregatorContext();
 
-    bool IsInitialized() const;
+  bool IsInitialized() const;
 
-    const std::vector<std::shared_ptr<RemoteMachine>>& GetRemoveServers() const;
+  const std::vector<std::shared_ptr<RemoteMachine>>& GetRemoveServers() const;
 
-    const std::shared_ptr<AggregatorSettings>& GetSettings() const;
+  const std::shared_ptr<AggregatorSettings>& GetSettings() const;
 
-private:
-    std::vector<std::shared_ptr<RemoteMachine>> m_remoteServers;
+ private:
+  std::vector<std::shared_ptr<RemoteMachine>> m_remoteServers;
 
-    std::shared_ptr<AggregatorSettings> m_settings;
+  std::shared_ptr<AggregatorSettings> m_settings;
 
-    bool m_initialized;
+  bool m_initialized;
 };
 
-} // namespace Aggregator
-} // namespace AnnService
+}  // namespace Aggregator
+}  // namespace AnnService
 
-
-#endif // _SPTAG_AGGREGATOR_AGGREGATORCONTEXT_H_
+#endif  // _SPTAG_AGGREGATOR_AGGREGATORCONTEXT_H_

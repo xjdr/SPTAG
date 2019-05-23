@@ -11,98 +11,86 @@
 #include <condition_variable>
 #include <mutex>
 
-namespace SPTAG
-{
-namespace IndexBuilder
-{
+namespace SPTAG {
+namespace IndexBuilder {
 
-class DefaultReader : public VectorSetReader
-{
-public:
-    DefaultReader(std::shared_ptr<BuilderOptions> p_options);
+class DefaultReader : public VectorSetReader {
+ public:
+  DefaultReader(std::shared_ptr<BuilderOptions> p_options);
 
-    virtual ~DefaultReader();
+  virtual ~DefaultReader();
 
-    virtual ErrorCode LoadFile(const std::string& p_filePaths);
+  virtual ErrorCode LoadFile(const std::string& p_filePaths);
 
-    virtual std::shared_ptr<VectorSet> GetVectorSet() const;
+  virtual std::shared_ptr<VectorSet> GetVectorSet() const;
 
-    virtual std::shared_ptr<MetadataSet> GetMetadataSet() const;
+  virtual std::shared_ptr<MetadataSet> GetMetadataSet() const;
 
-private:
-    typedef std::pair<std::string, std::size_t> FileInfoPair;
+ private:
+  typedef std::pair<std::string, std::size_t> FileInfoPair;
 
-    static std::vector<FileInfoPair> GetFileSizes(const std::string& p_filePaths);
+  static std::vector<FileInfoPair> GetFileSizes(const std::string& p_filePaths);
 
-    void LoadFileInternal(const std::string& p_filePath,
-                          std::uint32_t p_subtaskID,
-                          std::uint32_t p_fileBlockID,
-                          std::size_t p_fileBlockSize);
+  void LoadFileInternal(const std::string& p_filePath,
+                        std::uint32_t p_subtaskID, std::uint32_t p_fileBlockID,
+                        std::size_t p_fileBlockSize);
 
-    void MergeData();
+  void MergeData();
 
-    template<typename DataType>
-    bool TranslateVector(char* p_str, DataType* p_vector)
-    {
-        std::uint32_t eleCount = 0;
-        char* next = p_str;
-        while ((*next) != '\0')
-        {
-            while ((*next) != '\0' && m_options->m_vectorDelimiter.find(*next) == std::string::npos)
-            {
-                ++next;
-            }
+  template <typename DataType>
+  bool TranslateVector(char* p_str, DataType* p_vector) {
+    std::uint32_t eleCount = 0;
+    char* next = p_str;
+    while ((*next) != '\0') {
+      while ((*next) != '\0' &&
+             m_options->m_vectorDelimiter.find(*next) == std::string::npos) {
+        ++next;
+      }
 
-            bool reachEnd = ('\0' == (*next));
-            *next = '\0';
-            if (p_str != next)
-            {
-                if (eleCount >= m_options->m_dimension)
-                {
-                    return false;
-                }
-
-                if (!Helper::Convert::ConvertStringTo(p_str, p_vector[eleCount++]))
-                {
-                    return false;
-                }
-            }
-
-            if (reachEnd)
-            {
-                break;
-            }
-
-            ++next;
-            p_str = next;
+      bool reachEnd = ('\0' == (*next));
+      *next = '\0';
+      if (p_str != next) {
+        if (eleCount >= m_options->m_dimension) {
+          return false;
         }
 
-        return eleCount == m_options->m_dimension;
+        if (!Helper::Convert::ConvertStringTo(p_str, p_vector[eleCount++])) {
+          return false;
+        }
+      }
+
+      if (reachEnd) {
+        break;
+      }
+
+      ++next;
+      p_str = next;
     }
 
-private:
-    std::uint32_t m_subTaskCount;
+    return eleCount == m_options->m_dimension;
+  }
 
-    std::size_t m_subTaskBlocksize;
+ private:
+  std::uint32_t m_subTaskCount;
 
-    std::atomic<std::uint32_t> m_totalRecordCount;
+  std::size_t m_subTaskBlocksize;
 
-    std::atomic<std::size_t> m_totalRecordVectorBytes;
+  std::atomic<std::uint32_t> m_totalRecordCount;
 
-    std::vector<std::uint32_t> m_subTaskRecordCount;
+  std::atomic<std::size_t> m_totalRecordVectorBytes;
 
-    std::string m_vectorOutput;
+  std::vector<std::uint32_t> m_subTaskRecordCount;
 
-    std::string m_metadataConentOutput;
+  std::string m_vectorOutput;
 
-    std::string m_metadataIndexOutput;
+  std::string m_metadataConentOutput;
 
-    Helper::Concurrent::WaitSignal m_waitSignal;
+  std::string m_metadataIndexOutput;
+
+  Helper::Concurrent::WaitSignal m_waitSignal;
 };
 
+}  // namespace IndexBuilder
+}  // namespace SPTAG
 
-
-} // namespace IndexBuilder
-} // namespace SPTAG
-
-#endif // _SPTAG_INDEXBUILDER_VECTORSETREADERS_DEFAULT_H_
+#endif  // _SPTAG_INDEXBUILDER_VECTORSETREADERS_DEFAULT_H_

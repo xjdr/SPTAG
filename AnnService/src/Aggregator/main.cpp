@@ -5,15 +5,12 @@
 
 SPTAG::Aggregator::AggregatorService g_service;
 
-int main(int argc, char* argv[])
-{
-    if (!g_service.Initialize())
-    {
-        return 1;
-    }
+int main(int argc, char* argv[]) {
+  if (!g_service.Initialize()) {
+    return 1;
+  }
 
-    g_service.Run();
+  g_service.Run();
 
-    return 0;
+  return 0;
 }
-

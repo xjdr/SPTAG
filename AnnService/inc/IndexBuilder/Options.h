@@ -7,41 +7,37 @@
 #include "inc/Core/Common.h"
 #include "inc/Helper/ArgumentsParser.h"
 
+#include <memory>
 #include <string>
 #include <vector>
-#include <memory>
 
-namespace SPTAG
-{
-namespace IndexBuilder
-{
+namespace SPTAG {
+namespace IndexBuilder {
 
-class BuilderOptions : public Helper::ArgumentsParser
-{
-public:
-    BuilderOptions();
+class BuilderOptions : public Helper::ArgumentsParser {
+ public:
+  BuilderOptions();
 
-    ~BuilderOptions();
+  ~BuilderOptions();
 
-    std::uint32_t m_threadNum;
+  std::uint32_t m_threadNum;
 
-    std::uint32_t m_dimension;
+  std::uint32_t m_dimension;
 
-    std::string m_vectorDelimiter;
+  std::string m_vectorDelimiter;
 
-    SPTAG::VectorValueType m_inputValueType;
+  SPTAG::VectorValueType m_inputValueType;
 
-    std::string m_inputFiles;
+  std::string m_inputFiles;
 
-    std::string m_outputFolder;
+  std::string m_outputFolder;
 
-    SPTAG::IndexAlgoType m_indexAlgoType;
+  SPTAG::IndexAlgoType m_indexAlgoType;
 
-    std::string m_builderConfigFile;
+  std::string m_builderConfigFile;
 };
 
+}  // namespace IndexBuilder
+}  // namespace SPTAG
 
-} // namespace IndexBuilder
-} // namespace SPTAG
-
-#endif // _SPTAG_INDEXBUILDER_OPTIONS_H_
+#endif  // _SPTAG_INDEXBUILDER_OPTIONS_H_

@@ -8,32 +8,24 @@
 
 #include <string>
 
-namespace SPTAG
-{
-namespace Aggregator
-{
+namespace SPTAG {
+namespace Aggregator {
 
-struct AggregatorSettings
-{
-    AggregatorSettings();
+struct AggregatorSettings {
+  AggregatorSettings();
 
-    std::string m_listenAddr;
+  std::string m_listenAddr;
 
-    std::string m_listenPort;
+  std::string m_listenPort;
 
-    std::uint32_t m_searchTimeout;
+  std::uint32_t m_searchTimeout;
 
-    SizeType m_threadNum;
+  SizeType m_threadNum;
 
-    SizeType m_socketThreadNum;
+  SizeType m_socketThreadNum;
 };
 
+}  // namespace Aggregator
+}  // namespace AnnService
 
-
-
-} // namespace Aggregator
-} // namespace AnnService
-
-
-#endif // _SPTAG_AGGREGATOR_AGGREGATORSETTINGS_H_
-
+#endif  // _SPTAG_AGGREGATOR_AGGREGATORSETTINGS_H_

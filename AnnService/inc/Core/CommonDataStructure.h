@@ -6,51 +6,51 @@
 
 #include "Common.h"
 
-namespace SPTAG
-{
+namespace SPTAG {
 
-class ByteArray
-{
-public:
-    ByteArray();
+class ByteArray {
+ public:
+  ByteArray();
 
-    ByteArray(ByteArray&& p_right);
+  ByteArray(ByteArray&& p_right);
 
-    ByteArray(std::uint8_t* p_array, std::size_t p_length, bool p_transferOnwership);
+  ByteArray(std::uint8_t* p_array, std::size_t p_length,
+            bool p_transferOnwership);
 
-    ByteArray(std::uint8_t* p_array, std::size_t p_length, std::shared_ptr<std::uint8_t> p_dataHolder);
+  ByteArray(std::uint8_t* p_array, std::size_t p_length,
+            std::shared_ptr<std::uint8_t> p_dataHolder);
 
-    ByteArray(const ByteArray& p_right);
+  ByteArray(const ByteArray& p_right);
 
-    ByteArray& operator= (const ByteArray& p_right);
+  ByteArray& operator=(const ByteArray& p_right);
 
-    ByteArray& operator= (ByteArray&& p_right);
+  ByteArray& operator=(ByteArray&& p_right);
 
-    ~ByteArray();
+  ~ByteArray();
 
-    static ByteArray Alloc(std::size_t p_length);
+  static ByteArray Alloc(std::size_t p_length);
 
-    std::uint8_t* Data() const;
+  std::uint8_t* Data() const;
 
-	std::size_t Length() const;
-    
-	void SetData(std::uint8_t* p_array, std::size_t p_length);
+  std::size_t Length() const;
 
-    std::shared_ptr<std::uint8_t> DataHolder() const;
+  void SetData(std::uint8_t* p_array, std::size_t p_length);
 
-    void Clear();
+  std::shared_ptr<std::uint8_t> DataHolder() const;
 
-    const static ByteArray c_empty;
+  void Clear();
 
-private:
-    std::uint8_t* m_data;
+  const static ByteArray c_empty;
 
-    std::size_t m_length;
+ private:
+  std::uint8_t* m_data;
 
-    // Notice this is holding an array. Set correct deleter for this.
-    std::shared_ptr<std::uint8_t> m_dataHolder;
+  std::size_t m_length;
+
+  // Notice this is holding an array. Set correct deleter for this.
+  std::shared_ptr<std::uint8_t> m_dataHolder;
 };
 
-} // namespace SPTAG
+}  // namespace SPTAG
 
-#endif // _SPTAG_COMMONDATASTRUCTURE_H_
+#endif  // _SPTAG_COMMONDATASTRUCTURE_H_

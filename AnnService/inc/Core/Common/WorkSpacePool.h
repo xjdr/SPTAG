@@ -9,35 +9,31 @@
 #include <list>
 #include <mutex>
 
-namespace SPTAG
-{
-namespace COMMON
-{
+namespace SPTAG {
+namespace COMMON {
 
-class WorkSpacePool
-{
-public:
-    WorkSpacePool(int p_maxCheck, int p_vectorCount);
+class WorkSpacePool {
+ public:
+  WorkSpacePool(int p_maxCheck, int p_vectorCount);
 
-    virtual ~WorkSpacePool();
+  virtual ~WorkSpacePool();
 
-    std::shared_ptr<WorkSpace> Rent();
+  std::shared_ptr<WorkSpace> Rent();
 
-    void Return(const std::shared_ptr<WorkSpace>& p_workSpace);
+  void Return(const std::shared_ptr<WorkSpace>& p_workSpace);
 
-    void Init(int size);
+  void Init(int size);
 
-private:
-    std::list<std::shared_ptr<WorkSpace>> m_workSpacePool;
+ private:
+  std::list<std::shared_ptr<WorkSpace>> m_workSpacePool;
 
-    std::mutex m_workSpacePoolMutex;
+  std::mutex m_workSpacePoolMutex;
 
-    int m_maxCheck;
+  int m_maxCheck;
 
-    int m_vectorCount;
+  int m_vectorCount;
 };
-
 }
 }
 
-#endif // _SPTAG_COMMON_WORKSPACEPOOL_H_
+#endif  // _SPTAG_COMMON_WORKSPACEPOOL_H_

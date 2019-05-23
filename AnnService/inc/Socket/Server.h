@@ -8,48 +8,43 @@
 #include "ConnectionManager.h"
 #include "Packet.h"
 
-#include <string>
-#include <memory>
 #include <boost/asio.hpp>
+#include <memory>
+#include <string>
 
-namespace SPTAG
-{
-namespace Socket
-{
+namespace SPTAG {
+namespace Socket {
 
-class Server
-{
-public:
-    Server(const std::string& p_address,
-           const std::string& p_port,
-           const PacketHandlerMapPtr& p_handlerMap,
-           std::size_t p_threadNum);
+class Server {
+ public:
+  Server(const std::string& p_address, const std::string& p_port,
+         const PacketHandlerMapPtr& p_handlerMap, std::size_t p_threadNum);
 
-    ~Server();
+  ~Server();
 
-    void StartListen();
+  void StartListen();
 
-    void SendPacket(ConnectionID p_connection, Packet p_packet, std::function<void(bool)> p_callback);
+  void SendPacket(ConnectionID p_connection, Packet p_packet,
+                  std::function<void(bool)> p_callback);
 
-    void SetEventOnConnectionClose(std::function<void(ConnectionID)> p_event);
+  void SetEventOnConnectionClose(std::function<void(ConnectionID)> p_event);
 
-private:
-    void StartAccept();
+ private:
+  void StartAccept();
 
-private:
-    boost::asio::io_context m_ioContext;
+ private:
+  boost::asio::io_context m_ioContext;
 
-    boost::asio::ip::tcp::acceptor m_acceptor;
+  boost::asio::ip::tcp::acceptor m_acceptor;
 
-    std::shared_ptr<ConnectionManager> m_connectionManager;
+  std::shared_ptr<ConnectionManager> m_connectionManager;
 
-    std::vector<std::thread> m_threadPool;
+  std::vector<std::thread> m_threadPool;
 
-    const PacketHandlerMapPtr m_requestHandlerMap;
+  const PacketHandlerMapPtr m_requestHandlerMap;
 };
 
+}  // namespace Socket
+}  // namespace SPTAG
 
-} // namespace Socket
-} // namespace SPTAG
-
-#endif // _SPTAG_SOCKET_SERVER_H_
+#endif  // _SPTAG_SOCKET_SERVER_H_

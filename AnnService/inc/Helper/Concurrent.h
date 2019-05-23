@@ -4,65 +4,58 @@
 #ifndef _SPTAG_HELPER_CONCURRENT_H_
 #define _SPTAG_HELPER_CONCURRENT_H_
 
-#include <cstdint>
-#include <cstddef> 
 #include <atomic>
 #include <condition_variable>
-#include <mutex>
+#include <cstddef>
+#include <cstdint>
 #include <memory>
+#include <mutex>
 
-namespace SPTAG
-{
-namespace Helper
-{
-namespace Concurrent
-{
+namespace SPTAG {
+namespace Helper {
+namespace Concurrent {
 
-class SpinLock
-{
-public:
-    SpinLock();
-    ~SpinLock();
+class SpinLock {
+ public:
+  SpinLock();
+  ~SpinLock();
 
-    void Lock();
-    void Unlock();
+  void Lock();
+  void Unlock();
 
-    SpinLock(const SpinLock&) = delete;
-    SpinLock& operator = (const SpinLock&) = delete;
+  SpinLock(const SpinLock&) = delete;
+  SpinLock& operator=(const SpinLock&) = delete;
 
-private:
-    std::atomic_flag m_lock;
+ private:
+  std::atomic_flag m_lock;
 };
 
+class WaitSignal {
+ public:
+  WaitSignal();
 
-class WaitSignal
-{
-public:
-    WaitSignal();
+  WaitSignal(std::uint32_t p_unfinished);
 
-    WaitSignal(std::uint32_t p_unfinished);
+  ~WaitSignal();
 
-    ~WaitSignal();
+  void Reset(std::uint32_t p_unfinished);
 
-    void Reset(std::uint32_t p_unfinished);
+  void Wait();
 
-    void Wait();
+  void FinishOne();
 
-    void FinishOne();
+ private:
+  std::atomic<std::uint32_t> m_unfinished;
 
-private:
-    std::atomic<std::uint32_t> m_unfinished;
+  std::atomic_bool m_isWaiting;
 
-    std::atomic_bool m_isWaiting;
+  std::mutex m_mutex;
 
-    std::mutex m_mutex;
-
-    std::condition_variable m_cv;
+  std::condition_variable m_cv;
 };
 
+}  // namespace Base64
+}  // namespace Helper
+}  // namespace SPTAG
 
-} // namespace Base64
-} // namespace Helper
-} // namespace SPTAG
-
-#endif // _SPTAG_HELPER_CONCURRENT_H_
+#endif  // _SPTAG_HELPER_CONCURRENT_H_

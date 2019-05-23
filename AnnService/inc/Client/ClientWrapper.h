@@ -4,77 +4,73 @@
 #ifndef _SPTAG_CLIENT_CLIENTWRAPPER_H_
 #define _SPTAG_CLIENT_CLIENTWRAPPER_H_
 
+#include "Options.h"
 #include "inc/Socket/Client.h"
 #include "inc/Socket/RemoteSearchQuery.h"
 #include "inc/Socket/ResourceManager.h"
-#include "Options.h"
 
-#include <string>
-#include <vector>
-#include <memory>
 #include <atomic>
-#include <thread>
-#include <mutex>
 #include <condition_variable>
 #include <functional>
+#include <memory>
+#include <mutex>
+#include <string>
+#include <thread>
+#include <vector>
 
-namespace SPTAG
-{
-namespace Client
-{
+namespace SPTAG {
+namespace Client {
 
-class ClientWrapper
-{
-public:
-    typedef std::function<void(Socket::RemoteSearchResult)> Callback;
+class ClientWrapper {
+ public:
+  typedef std::function<void(Socket::RemoteSearchResult)> Callback;
 
-    ClientWrapper(const ClientOptions& p_options);
+  ClientWrapper(const ClientOptions& p_options);
 
-    ~ClientWrapper();
+  ~ClientWrapper();
 
-    void SendQueryAsync(const Socket::RemoteQuery& p_query,
-                        Callback p_callback,
-                        const ClientOptions& p_options);
+  void SendQueryAsync(const Socket::RemoteQuery& p_query, Callback p_callback,
+                      const ClientOptions& p_options);
 
-    void WaitAllFinished();
+  void WaitAllFinished();
 
-    bool IsAvailable() const;
+  bool IsAvailable() const;
 
-private:
-    typedef std::pair<Socket::ConnectionID, Socket::ConnectionID> ConnectionPair;
+ private:
+  typedef std::pair<Socket::ConnectionID, Socket::ConnectionID> ConnectionPair;
 
-    Socket::PacketHandlerMapPtr GetHandlerMap();
+  Socket::PacketHandlerMapPtr GetHandlerMap();
 
-    void DecreaseUnfnishedJobCount();
+  void DecreaseUnfnishedJobCount();
 
-    const ConnectionPair& GetConnection();
+  const ConnectionPair& GetConnection();
 
-    void SearchResponseHanlder(Socket::ConnectionID p_localConnectionID, Socket::Packet p_packet);
+  void SearchResponseHanlder(Socket::ConnectionID p_localConnectionID,
+                             Socket::Packet p_packet);
 
-    void HandleDeadConnection(Socket::ConnectionID p_cid);
+  void HandleDeadConnection(Socket::ConnectionID p_cid);
 
-private:
-    ClientOptions m_options;
+ private:
+  ClientOptions m_options;
 
-    std::unique_ptr<Socket::Client> m_client;
+  std::unique_ptr<Socket::Client> m_client;
 
-    std::atomic<std::uint32_t> m_unfinishedJobCount;
+  std::atomic<std::uint32_t> m_unfinishedJobCount;
 
-    std::atomic_bool m_isWaitingFinish;
+  std::atomic_bool m_isWaitingFinish;
 
-    std::condition_variable m_waitingQueue;
+  std::condition_variable m_waitingQueue;
 
-    std::mutex m_waitingMutex;
+  std::mutex m_waitingMutex;
 
-    std::vector<ConnectionPair> m_connections;
+  std::vector<ConnectionPair> m_connections;
 
-    std::atomic<std::uint32_t> m_spinCountOfConnection;
+  std::atomic<std::uint32_t> m_spinCountOfConnection;
 
-    Socket::ResourceManager<Callback> m_callbackManager;
+  Socket::ResourceManager<Callback> m_callbackManager;
 };
 
+}  // namespace Socket
+}  // namespace SPTAG
 
-} // namespace Socket
-} // namespace SPTAG
-
-#endif // _SPTAG_CLIENT_OPTIONS_H_
+#endif  // _SPTAG_CLIENT_OPTIONS_H_

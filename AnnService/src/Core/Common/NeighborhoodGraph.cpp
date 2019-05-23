@@ -6,12 +6,11 @@
 
 using namespace SPTAG::COMMON;
 
-std::shared_ptr<NeighborhoodGraph> NeighborhoodGraph::CreateInstance(std::string type)
-{
-    std::shared_ptr<NeighborhoodGraph> res;
-    if (type == "RNG")
-    {
-        res.reset(new RelativeNeighborhoodGraph);
-    }
-    return res;
+std::shared_ptr<NeighborhoodGraph> NeighborhoodGraph::CreateInstance(
+    std::string type) {
+  std::shared_ptr<NeighborhoodGraph> res;
+  if (type == "RNG") {
+    res.reset(new RelativeNeighborhoodGraph);
+  }
+  return res;
 }

@@ -8,34 +8,26 @@
 
 #include <string>
 
-namespace SPTAG
-{
-namespace Service
-{
+namespace SPTAG {
+namespace Service {
 
-struct ServiceSettings
-{
-    ServiceSettings();
+struct ServiceSettings {
+  ServiceSettings();
 
-    std::string m_vectorSeparator;
+  std::string m_vectorSeparator;
 
-    std::string m_listenAddr;
+  std::string m_listenAddr;
 
-    std::string m_listenPort;
+  std::string m_listenPort;
 
-    SizeType m_defaultMaxResultNumber;
+  SizeType m_defaultMaxResultNumber;
 
-    SizeType m_threadNum;
+  SizeType m_threadNum;
 
-    SizeType m_socketThreadNum;
+  SizeType m_socketThreadNum;
 };
 
+}  // namespace Server
+}  // namespace AnnService
 
-
-
-} // namespace Server
-} // namespace AnnService
-
-
-#endif // _SPTAG_SERVER_SERVICESTTINGS_H_
-
+#endif  // _SPTAG_SERVER_SERVICESTTINGS_H_
